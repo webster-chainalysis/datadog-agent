@@ -21,6 +21,7 @@ type context struct {
 	Agent             bool
 	BothPythonPresent bool
 	Metadata          bool
+	Profiling         bool
 	Dogstatsd         bool
 	LogsAgent         bool
 	JMX               bool
@@ -48,6 +49,7 @@ func mkContext(buildType string) context {
 		Common:            true,
 		Agent:             true,
 		Metadata:          true,
+		Profiling:         true,
 		Dogstatsd:         true,
 		LogsAgent:         true,
 		JMX:               true,
