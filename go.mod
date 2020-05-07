@@ -72,6 +72,7 @@ require (
 	code.cloudfoundry.org/tlsconfig v0.0.0-20200131000646-bbe0f8da39b3 // indirect
 	github.com/DataDog/agent-payload v0.0.0-20200416172112-13d2aa7ab86f // 4.31.0
 	github.com/DataDog/datadog-go v3.5.0+incompatible
+	github.com/DataDog/datadog-operator v0.1.1-0.20200507135910-5afa74a30071
 	github.com/DataDog/gohai v0.0.0-20200124154531-8cbe900337f1
 	github.com/DataDog/gopsutil v0.0.0-20191127151039-7e1a4eadb59e
 	github.com/DataDog/mmh3 v0.0.0-20200316233529-f5b682d8c981 // indirect
@@ -86,17 +87,16 @@ require (
 	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575
 	github.com/clbanning/mxj v1.8.4
 	github.com/containerd/cgroups v0.0.0-00010101000000-000000000000
-	github.com/containerd/containerd v1.0.2
+	github.com/containerd/containerd v1.2.7
 	github.com/containerd/continuity v0.0.0-20200228182428-0f16d7a0959c // indirect
 	github.com/containerd/fifo v0.0.0-20191213151349-ff969a566b00 // indirect
 	github.com/containerd/typeurl v1.0.0
 	github.com/coreos/etcd v3.3.15+incompatible
 	github.com/coreos/go-semver v0.3.0
-	github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e
+	github.com/coreos/go-systemd v0.0.0-20190620071333-e64a0ec8b42a
 	github.com/docker/docker v17.12.0-ce-rc1.0.20200309214505-aa6a9891b09c+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/docker/go-events v0.0.0-20190806004212-e31b211e4f1c // indirect
-	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.9.0
 	github.com/florianl/go-conntrack v0.1.0
@@ -107,7 +107,6 @@ require (
 	github.com/godbus/dbus v4.1.0+incompatible
 	github.com/gogo/googleapis v1.3.2 // indirect
 	github.com/gogo/protobuf v1.3.1
-	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/gopacket v1.1.17
 	github.com/gorilla/mux v1.7.4
 	github.com/hashicorp/consul/api v1.4.0
@@ -121,15 +120,13 @@ require (
 	github.com/lxn/walk v0.0.0-20191128110447-55ccb3a9f5c1
 	github.com/lxn/win v0.0.0-20191128105842-2da648fda5b4
 	github.com/mdlayher/netlink v1.1.0
-	github.com/mholt/archiver v0.0.0-00010101000000-000000000000
-	github.com/miekg/dns v1.0.14
+	github.com/mholt/archiver v3.1.1+incompatible
+	github.com/miekg/dns v1.1.4
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
 	github.com/nwaples/rardecode v1.1.0 // indirect
 	github.com/oliveagle/jsonpath v0.0.0-20180606110733-2e52cf6e6852 // indirect
-	github.com/opencontainers/image-spec v1.0.1 // indirect
-	github.com/opencontainers/runc v1.0.0-rc10 // indirect
 	github.com/opencontainers/runtime-spec v1.0.2 // indirect
-	github.com/openshift/api v3.9.1-0.20190424152011-77b8897ec79a+incompatible
+	github.com/openshift/api v3.9.1-0.20190924102528-32369d4db2ad+incompatible
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/philhofer/fwd v1.0.0 // indirect
 	github.com/pierrec/lz4 v2.5.0+incompatible // indirect
@@ -158,7 +155,7 @@ require (
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/mobile v0.0.0-20190312151609-d3739f865fa6
 	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
-	golang.org/x/sync v0.0.0-20190423024810-112230192c58
+	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
 	golang.org/x/sys v0.0.0-20200323222414-85ca7c5b95cd
 	golang.org/x/text v0.3.2
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0
@@ -166,12 +163,12 @@ require (
 	gopkg.in/Knetic/govaluate.v3 v3.0.0 // indirect
 	gopkg.in/ini.v1 v1.55.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8
-	gopkg.in/zorkian/go-datadog-api.v2 v2.28.0
+	gopkg.in/zorkian/go-datadog-api.v2 v2.29.0
 	k8s.io/api v0.0.0
 	k8s.io/apimachinery v0.0.0
 	k8s.io/apiserver v0.0.0
-	k8s.io/client-go v11.0.0+incompatible
+	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/cri-api v0.0.0
-	k8s.io/kubernetes v1.15.4
+	k8s.io/kubernetes v1.16.2
 	k8s.io/metrics v0.0.0
 )
