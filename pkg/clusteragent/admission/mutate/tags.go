@@ -10,9 +10,11 @@ package mutate
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/DataDog/datadog-agent/pkg/clusteragent/admission"
+	"github.com/DataDog/datadog-agent/pkg/clusteragent/admission/metrics"
 	"github.com/DataDog/datadog-agent/pkg/util/kubernetes"
 	"github.com/DataDog/datadog-agent/pkg/util/log"
 
@@ -46,17 +48,21 @@ func InjectTags(req *admiv1beta1.AdmissionRequest, dc dynamic.Interface) (*admiv
 // env vars into a pod template if needed
 func injectTags(pod *corev1.Pod, ns string, dc dynamic.Interface) error {
 	if pod == nil {
+		metrics.MutationAttempts.Inc(metrics.TagsMutationType, strconv.FormatBool(false))
+		metrics.MutationErrors.Inc(metrics.TagsMutationType, "nil pod")
 		return errors.New("cannot inject tags into nil pod")
 	}
 
 	if !shouldInjectTags(pod) {
 		// Ignore pod if it has the label admission.datadoghq.com/enabled=false
+		metrics.MutationAttempts.Inc(metrics.TagsMutationType, strconv.FormatBool(false))
 		return nil
 	}
 
-	if injected := injectTagsFromLabels(pod.GetLabels(), pod); injected {
+	if found, injected := injectTagsFromLabels(pod.GetLabels(), pod); found {
 		// Standard labels found in the pod's labels
 		// No need to lookup the pod's owner
+		metrics.MutationAttempts.Inc(metrics.TagsMutationType, strconv.FormatBool(injected))
 		return nil
 	}
 
@@ -64,6 +70,8 @@ func injectTags(pod *corev1.Pod, ns string, dc dynamic.Interface) error {
 		if pod.GetNamespace() != "" {
 			ns = pod.GetNamespace()
 		} else {
+			metrics.MutationAttempts.Inc(metrics.TagsMutationType, strconv.FormatBool(false))
+			metrics.MutationErrors.Inc(metrics.TagsMutationType, "empty namespace")
 			return errors.New("cannot get standard tags from parent object: empty namespace")
 		}
 	}
@@ -71,16 +79,21 @@ func injectTags(pod *corev1.Pod, ns string, dc dynamic.Interface) error {
 	// Try to discover standard labels on the pod's owner
 	owners := pod.GetOwnerReferences()
 	if len(owners) == 0 {
+		metrics.MutationAttempts.Inc(metrics.TagsMutationType, strconv.FormatBool(false))
 		return nil
 	}
 
 	owner, err := getOwner(owners[0], ns, dc)
 	if err != nil {
+		metrics.MutationAttempts.Inc(metrics.TagsMutationType, strconv.FormatBool(false))
+		metrics.MutationErrors.Inc(metrics.TagsMutationType, "cannot get owner")
 		return err
 	}
 
 	log.Debugf("Looking for standard labels on '%s/%s' - kind '%s' owner of pod %s", owner.GetNamespace(), owner.GetName(), owner.GetKind(), podString(pod))
-	_ = injectTagsFromLabels(owner.GetLabels(), pod)
+	_, injected := injectTagsFromLabels(owner.GetLabels(), pod)
+	metrics.MutationAttempts.Inc(metrics.TagsMutationType, strconv.FormatBool(injected))
+
 	return nil
 }
 
@@ -94,19 +107,22 @@ func shouldInjectTags(pod *corev1.Pod) bool {
 
 // injectTagsFromLabels looks for standard tags in pod labels
 // and injects them as environment variables if found
-func injectTagsFromLabels(labels map[string]string, pod *corev1.Pod) bool {
-	injected := false
+func injectTagsFromLabels(labels map[string]string, pod *corev1.Pod) (bool, bool) {
+	found := false
+	injectedAtLeastOnce := false
 	for l, envName := range labelsToEnv {
-		if tagValue, found := labels[l]; found {
+		if tagValue, labelFound := labels[l]; labelFound {
 			env := corev1.EnvVar{
 				Name:  envName,
 				Value: tagValue,
 			}
-			injectEnv(pod, env)
-			injected = true
+			if injected := injectEnv(pod, env); injected {
+				injectedAtLeastOnce = true
+			}
+			found = true
 		}
 	}
-	return injected
+	return found, injectedAtLeastOnce
 }
 
 // getOwnerInfo returns the required information to get the owner object
