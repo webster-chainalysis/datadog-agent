@@ -1,6 +1,8 @@
 $Password = ConvertTo-SecureString "dummyPW_:-gch6Rejae9" -AsPlainText -Force
 New-LocalUser -Name "ddagentuser" -Description "Test user for the secrets feature on windows." -Password $Password
 
+[Environment]::Exit(10)
+
 if ($Env:NEW_BUILDER -eq "true") {
     if ($Env:TARGET_ARCH -eq "x64") {
         & ridk enable
